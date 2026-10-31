@@ -36,7 +36,20 @@ npm start            # 等价于 node server.js
 
 ## 部署（给大家使用）
 
-需要能跑 Node 的托管：Railway / Render / Fly.io / 任意 VPS。这些平台读取 `npm start` 即可。
+### Cloudflare Pages（免费、无需信用卡，推荐）
+
+仓库内置 `functions/[[route]].js`，Cloudflare Pages 会自动把它作为后端代理（`/api`、`/sprites`），静态文件由 Pages 直接托管，无需改动任何代码：
+
+1. 打开 https://dash.cloudflare.com → **Workers & Pages → Create → Pages → Connect to Git**
+2. 选择你的 `pokedex` 仓库
+3. 构建设置：**Framework preset** 选 `None`，**Build command** 留空，**Build output directory** 填 `/`
+4. 点 **Save and Deploy**，一两分钟后得到 `xxx.pages.dev` 公网地址
+
+免费额度：静态请求不限量，Function 请求 10 万次/天，边缘缓存 7 天。
+
+### Node 托管（Railway / Render / Fly.io / VPS）
+
+需要能跑 Node 的托管平台，读取 `npm start` 即可（本地开发也是 `npm start`）。
 首屏静态资源由本服务直接返回；`/api`、`/sprites` 走服务端缓存，所有用户共享，大幅减少 PokéAPI 请求量。
 
 > 若只想要纯静态托管（Netlify/Vercel/GitHub Pages 拖拽），前端也可直接连 PokéAPI（`app.js` 顶部 `API` 改为 `https://pokeapi.co/api/v2`、`SPRITE_BASE` 改回 jsDelivr 即可），但那样无服务端缓存、且部分地区可能访问不畅。
