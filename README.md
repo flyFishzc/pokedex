@@ -36,16 +36,15 @@ npm start            # 等价于 node server.js
 
 ## 部署（给大家使用）
 
-### Cloudflare Pages（免费、无需信用卡，推荐）
+### Cloudflare Workers（免费、无需信用卡，推荐）
 
-仓库内置 `functions/[[route]].js`，Cloudflare Pages 会自动把它作为后端代理（`/api`、`/sprites`），静态文件由 Pages 直接托管，无需改动任何代码：
+仓库内置 `wrangler.jsonc` 与 `worker.js`，Cloudflare 会自动识别：静态文件由 Workers Assets 托管，`/api`、`/sprites` 由 Worker 代理并做 7 天边缘缓存：
 
-1. 打开 https://dash.cloudflare.com → **Workers & Pages → Create → Pages → Connect to Git**
-2. 选择你的 `pokedex` 仓库
-3. 构建设置：**Framework preset** 选 `None`，**Build command** 留空，**Build output directory** 填 `/`
-4. 点 **Save and Deploy**，一两分钟后得到 `xxx.pages.dev` 公网地址
+1. 打开 https://dash.cloudflare.com → **Workers & Pages → Create → Connect to Git**，选择你的 `pokedex` 仓库
+2. 保持默认（构建命令留空、部署命令 `npx wrangler deploy`）
+3. 部署完成后得到 `pokedex.<你的子域>.workers.dev` 公网地址
 
-免费额度：静态请求不限量，Function 请求 10 万次/天，边缘缓存 7 天。
+免费额度：静态请求不限量，Worker 请求 10 万次/天。
 
 ### Node 托管（Railway / Render / Fly.io / VPS）
 
