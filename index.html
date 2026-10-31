@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>宝可梦大全 · Pokédex</title>
+<meta name="description" content="宝可梦图鉴大全：搜索、属性筛选、能力值、进化链与收藏。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23e63946'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23fff'/%3E%3Cpath d='M4 50h92' stroke='%23222' stroke-width='8'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="ball" aria-hidden="true"></span>
+    <div>
+      <h1>宝可梦大全</h1>
+      <p class="sub">全国图鉴 · 数据来自 PokéAPI</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button id="favToggle" class="chip chip-fav" type="button" aria-pressed="false" title="只看收藏">
+      ★ 收藏 <span id="favCount" class="chip-count">0</span>
+    </button>
+    <button id="themeToggle" class="icon-btn" type="button" title="切换主题">🌙</button>
+  </div>
+</header>
+
+<section class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon" aria-hidden="true">🔍</span>
+    <input id="search" type="search" placeholder="搜索名称或编号，如 pikachu / 25" autocomplete="off" />
+    <button id="clearSearch" class="clear-btn" type="button" hidden aria-label="清空">✕</button>
+  </div>
+  <div class="selects">
+    <div class="seg" id="modeSeg" role="group" aria-label="搜索模式">
+      <button type="button" data-mode="name" class="on">名称</button>
+      <button type="button" data-mode="desc">描述</button>
+    </div>
+    <select id="sort" aria-label="排序方式">
+      <option value="id">按编号</option>
+      <option value="name">按名称</option>
+      <option value="random">随机</option>
+    </select>
+    <button id="surprise" class="btn-ghost" type="button">🎲 随机一只</button>
+  </div>
+</section>
+
+<div id="descPanel" class="desc-panel" hidden>
+  <div class="desc-head">
+    <strong>📝 描述搜索</strong>
+    <span class="desc-hint">输入如「会放电的小老鼠」「喷火的龙」「草系乌龟」等，按图鉴说明与属性匹配。</span>
+  </div>
+  <div class="progress"><span id="descBar"></span></div>
+  <div class="desc-actions">
+    <button id="buildIndex" class="btn-primary" type="button">开始建立索引</button>
+    <button id="cancelBuild" class="btn-ghost" type="button" hidden>取消</button>
+    <span id="buildStatus" class="loading-tip"></span>
+  </div>
+</div>
+
+<nav id="typeBar" class="type-bar" aria-label="属性筛选">
+  <button class="type-chip is-active" data-type="all" type="button">全部</button>
+</nav>
+
+<main>
+  <div class="list-meta">
+    <span id="resultCount">加载中…</span>
+    <span id="loadingTip" class="loading-tip" hidden>加载中…</span>
+  </div>
+
+  <div id="grid" class="grid" aria-live="polite"></div>
+
+  <div id="empty" class="empty" hidden>
+    <p class="empty-emoji">🔎</p>
+    <p>没有找到匹配的宝可梦</p>
+    <button id="resetFilter" class="btn-primary" type="button">重置筛选</button>
+  </div>
+
+  <div class="more-wrap">
+    <button id="loadMore" class="btn-primary" type="button" hidden>加载更多</button>
+    <div id="sentinel" aria-hidden="true"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>本站为学习用途的粉丝作品，宝可梦及角色名称版权归 Nintendo / Creatures / GAME FREAK 所有。</p>
+</footer>
+
+<!-- 详情弹窗 -->
+<div id="modal" class="modal" hidden>
+  <!-- <div class="modal-backdrop" data-close></div> -->
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="mName">
+    <button class="modal-close" type="button" data-close aria-label="关闭">✕</button>
+    <div class="modal-nav">
+      <button id="prevBtn" class="icon-btn" type="button" title="上一只（←）">‹</button>
+      <button id="nextBtn" class="icon-btn" type="button" title="下一只（→）">›</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
